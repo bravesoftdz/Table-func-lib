@@ -1,0 +1,101 @@
+Table function lib was created for my own work projects involving photometry, colorimetry, some sort of mathematical modelling of optical systems.
+
+It's written on Delphi but should also work on Cylix/ Lazarus, but I haven't checked it yet, sorry :(
+
+The main features of this lib:
+
+- Class "table_func" is defined. You can make an instance of that class and work with it like it's just a mathematical function:
+
+var y: table_func;
+result: Real;
+...
+
+y:=table_func.Create('example.txt');
+result:=y[1.56];
+
+...
+
+y.Free;
+
+Note that once the table was loaded from file, spline coefficients are automatically computed, so line "result=y[1.56]" is valid and returns good approximation no matter is value of function at 1.56 really in the table or not.
+
+You can do something like that:
+
+var v,solar_spectrum: table_func;
+lux: Real;
+
+...
+
+v:=table_func.Create('luminosity_curve.txt'); //sensitivity of human eye, curve that defines photometry units such as Lumen, Candela etc.
+
+solar_spectrum.Create('solar_spectrum.txt'); //solar spectral irradiance, W cm^-2 nm^ -1 (at distance 1 a.u, that is, near Earth)
+
+solar_spectrum.multiply(v);
+lux:=solar_spectrum.integrate; //We found illuminance of sun in space near Earth
+...
+
+v.free;
+solar_spectrum.free;
+
+- Simple loading from file and saving to file. There are 2 supported file formats. 
+Plain text format: just two columns separated by tabs or spaces or commas or semicolons, whatever. Something like that:
+0	0
+1	1
+2	0
+3	-1
+4	0
+
+Ini file format: has 3 sections: general, description and data. Here is example:
+[general]
+title=Solar Spectrum
+Xname=Wavelength
+Yname=Spectral irradiance
+Xunit=nm
+Yunit=W*(cm)^-2*(um)^-1
+order=1
+[description]
+Data taken from "Planets As Background Noise in Free Space Optical Communications"
+[data]
+120	1E-5
+140	3E-6
+150	7E-6
+160	2,3E-5
+170	6,3E-5
+180	0,000125
+190	0,000271
+200	0,00107
+210	0,00229
+220	0,00575
+225	0,00649
+230	0,00667
+....
+
+Such a file is very useful because it contains not only points of data but some additional information. Using special fields for units in x and y values could be of great use to control whether result is of correct unit or not, or even automatically convert nm to um or just meters if needed. But such functionality wasn't implemented yet.
+
+There is example:
+
+var s: table_func;
+
+...
+s:=table_func.Create;
+s.order:=1; //order of interpolation. 
+//Order 0 means stairs-like graph: after each point the y value just remains unchanged till the next point	
+//order 1 means connecting points by straight lines
+//order 2 isn't implemented because of it's useless
+//order 3 is set by default, it's cubic spline interpolation: Each segment between points is cubic parabole, coefficient are computed so, that the whole function has no gaps, so is its first derivative. At the end points additional conditions are set: the second derivative is equal to zero. 
+
+s.title:='Solar Spectrum';
+s.Xname:='Wavelength';
+s.Yname:='Spectral irradiance';
+s.Xunit:='nm';
+s.Yunit:='W*(cm)^-2*(um)^-1';
+s.description:='Data taken from "Planets As Background Noise in Free Space Optical Communications"';
+
+s.addpoint(120, 1E-5);
+s.addpoint(230, 0,00667);
+s.addpoint(140, 3E-6); //you can add points at random order. 
+...
+
+s.SaveToFile('Solar_Spectrum.txt');
+s.free;
+
