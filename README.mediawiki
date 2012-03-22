@@ -39,15 +39,15 @@ It's written on Delphi but should also work on Cylix/ Lazarus, but I haven't che
 * ''multiply(by) procedure added: it multiplies table function by another table function or just by a constant value (Real). 
 * '' integrate '' function added: it takes definite integral over entire domain of function
 
- '''v. 0.53'''
+''' v. 0.53 '''
 * ''constructor'' now have overloaded version Create(Filename) to load function from file once the instance was created.
 * ''chart_series'' property and ''draw'' procedure added, to automatically draw the function on TeeChart component.
 
-'''v. 0.52'''
+''' v. 0.52 '''
 * ''addpoint(x,y)'' procedure added, it does exactly what it says. And re-calculate splines afterwards.
 * ''enabled'' property added, it is ''true'' if there is at least one point in the table.
 
-'''v. 0.51'''
+''' v. 0.51 '''
 * access violation bug fixed in ''update_spline'' procedure. The value of ''for'' counter used after the for loop, so it was unstable.
 * ''Constructor'' changed to have ''order'' initially set to 3 (cubic interpolation) instead of 0 (stairs)
 
