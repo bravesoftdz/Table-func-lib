@@ -1,4 +1,4 @@
-unit table_func_lib_0_72;
+unit table_func_lib;
 (*
 version 0.72
 изменения в 0.72
@@ -11,7 +11,7 @@ version 0.72
 изменения в 0.70
 - процедура Draw смотрит минимальное и максимальное значения на графике, если они заданы
 - в ней же вместо отрисовки по фактическому кол-ву пикселей по ширине, берется характерное значение для наших экранов - 1280 пикс.
-- [в процессе] новый формат данных в документе, чтобы можно было указать порядок интерполяции, подписи к осям, имя графика,
+- новый формат данных в документе, чтобы можно было указать порядок интерполяции, подписи к осям, имя графика,
 описание, размерности и пр. Но надо оставить совместимость с прошлым форматом.
 Секция [general]
 title - название графика
@@ -364,7 +364,7 @@ var F: TextFile;
     formatSettings : TFormatSettings;
 begin
 try
-  GetLocaleFormatSettings(LOCALE_SYSTEM_DEFAULT, formatSettings);
+  GetLocaleFormatSettings($0800, formatSettings);
   separator:=formatsettings.DecimalSeparator;
 
   LoadFromFile:=false;
