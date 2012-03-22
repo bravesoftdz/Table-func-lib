@@ -1,6 +1,10 @@
-unit table_func_lib_0_71;
+unit table_func_lib_0_72;
 (*
-version 0.71
+version 0.72
+изменения в 0.72
+- позволяет на любом компьютере, независимо от региональных настроек, работать как с
+точкой, так и с запятой в роли разделителя целой и дробной части
+
 изменения в 0.71
 - в явном виде возвращает ноль, если значение x вне области определения функции
 
@@ -356,8 +360,13 @@ var F: TextFile;
     s0,s,t: string;
     i,j,k: Integer;
     section: (general,descr,data);
+    separator: char;
+    formatSettings : TFormatSettings;
 begin
 try
+  GetLocaleFormatSettings(LOCALE_SYSTEM_DEFAULT, formatSettings);
+  separator:=formatsettings.DecimalSeparator;
+
   LoadFromFile:=false;
   assignFile(F,filename);
   Reset(F);
@@ -365,6 +374,9 @@ try
   SetLength(Y,1);
   section:=data;
   i:=0;
+
+
+
   repeat
     ReadLn(F,s);
     //пропустим пробелы и табуляцию
@@ -399,7 +411,7 @@ try
       {find end of number}
       k:=j;
       while (k<=Length(s)) and ((s[k]<>' ') and (s[k]<>#9)) do begin
-        if s[k]='.' then s[k]:=',';
+        if (s[k]='.') or (s[k]=',') then s[k]:=separator;
         inc(k);
       end;
       {manage dynamic array in asimptotically fast way}
