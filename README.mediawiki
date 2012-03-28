@@ -8,7 +8,7 @@ It's written on Delphi but should also work on Cylix/ Lazarus, but I haven't che
 
 '''v. 0.73'''
 * ''derivative'' and ''integral'' procedures added. They change the function into it's derivative or definite integral (from xmin to x) respectively. 
-* second order interpolation added. IT'S NOT RECOMMENDED TO USE IT! In fact, it was introduce to demonstrate to my boss that second order interpolation is bad idea!
+* second order interpolation added. IT'S NOT RECOMMENDED TO USE IT! In fact, it was introduced to demonstrate to my boss that second order interpolation is bad idea!
 
 '''v. 0.72'''
 * decimal separator from local settings is used, so now AT LAST this procedure works on any computer, with any decimal separator used in file. 
@@ -33,7 +33,7 @@ It's written on Delphi but should also work on Cylix/ Lazarus, but I haven't che
 * Private boolean  ''changed'' variable introduced, it is set to ''true'' if the function changed and to ''false'' after calling update_spline. So, if lots of points are added, no computation occurs until someobody calls ''value''.
 
 '''v. 0.61'''
-* '' Clear ''  procedure added, it clears all the data, but leaves chart_series the same
+* '' Clear ''  procedure added, it clears all the data, but leaves ''chart_series'' the same
 
 ''' v. 0.6 '''
 * unused variables from '' addpoint '' procedure were removed
@@ -79,7 +79,7 @@ The main features of this lib:
  y.Free;
 </pre>
 
-Note that once the table was loaded from file, spline coefficients are automatically computed, so line "result=y[1.56]" is valid and returns good approximation no matter is value of function at 1.56 really in the table or not.
+Note that once the table was loaded from file, spline coefficients are automatically computed, so line "result=y[1.56]" is valid and returns good approximation no matter whether value of function at 1.56 really is in the table or not.
 
 You can do something like that:
 <pre>
@@ -150,7 +150,7 @@ s:=table_func.Create;
 s.order:=1; //order of interpolation. 
 //Order 0 means stairs-like graph: after each point the y value just remains unchanged till the next point	
 //order 1 means connecting points by straight lines
-//order 2 isn't implemented because of it's useless
+//order 2: quadratic parabole interpolation, pretty useless. Was implemented to show my boss how useless it is. DON'T USE IT!
 //order 3 is set by default, it's cubic spline interpolation: Each segment between points is cubic parabole, coefficient are computed so, that the whole function has no gaps, so is its first derivative. At the end points additional conditions are set: the second derivative is equal to zero. 
 
 s.title:='Solar Spectrum';
