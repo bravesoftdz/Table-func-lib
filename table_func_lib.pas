@@ -2,6 +2,8 @@ unit table_func_lib;
 (*
 version 0.73
 - введены процедуры derivative (вз€тие производной) и integral (вз€тие неопределенного интеграла)
+- добавлена интерпол€ци€ 2-го пор€дка (квадратичными параболами), но пользоватьс€ ею не рекомендуетс€
+ (она введена как раз дл€ того, чтобы продемонстрировать ее ущербность)
 
 изменени€ в 0.72
 - позвол€ет на любом компьютере, независимо от региональных настроек, работать как с
@@ -261,6 +263,7 @@ end;
 procedure table_func.update_spline;
 var i,j: Integer;
     h,alpha,l,mu,z: array of Real; {дл€ вычислени€ сплайнов}
+    det,x1,x2,y1,y2: Real;
 begin
     changed:=false;
     i:=Length(X);
@@ -295,6 +298,20 @@ begin
       for i:=0 to j-1 do h[i]:=X[i+1]-X[i];
       if iorder=1 then begin
         for i:=0 to j-1 do b[i]:=(Y[i+1]-Y[i])/h[i];
+        exit;
+      end;
+      if iOrder=2 then begin
+        for i:=0 to j-2 do begin
+           x1:=X[i+1]-X[i];
+           x2:=X[i+2]-X[i];
+           y1:=Y[i+1]-Y[i];
+           y2:=Y[i+2]-Y[i];
+           det:=x1*x2*(x2-x1);
+           det:=1/det;
+           b[i]:=(y1*x2*x2-y2*x1*x1)*det;
+           c[i]:=(y2*x1-y1*x2)*det;
+        end;
+        b[j-1]:=(Y[j]-Y[j-1])/h[i];
         exit;
       end;
       Setlength(alpha,j+1);
