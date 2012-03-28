@@ -66,7 +66,7 @@ The main features of this lib:
 
 * Class "table_func" is defined. You can make an instance of that class and work with it like it's just a mathematical function:
 
-<code>
+<code><pre>
 var y: table_func;
 result: Real;
 ...
@@ -77,7 +77,7 @@ result:=y[1.56];
 ...
 
 y.Free;
-</code>
+</pre></code>
 
 Note that once the table was loaded from file, spline coefficients are automatically computed, so line "result=y[1.56]" is valid and returns good approximation no matter is value of function at 1.56 really in the table or not.
 
