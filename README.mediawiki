@@ -6,6 +6,9 @@ It's written on Delphi but should also work on Cylix/ Lazarus, but I haven't che
 
 === Changelog ===
 
+'''v. 0.73'''
+* ''derivative'' and ''integral'' procedures added. They change the function into it's derivative or definite integral (from xmin to x) respectively. 
+
 '''v. 0.72'''
 * decimal separator from local settings is used, so now AT LAST this procedure works on any computer, with any decimal separator used in file. 
 

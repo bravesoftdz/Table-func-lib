@@ -1,6 +1,8 @@
 unit table_func_lib;
 (*
-version 0.72
+version 0.73
+- введены процедуры derivative (вз€тие производной) и integral (вз€тие неопределенного интеграла)
+
 изменени€ в 0.72
 - позвол€ет на любом компьютере, независимо от региональных настроек, работать как с
 точкой, так и с зап€той в роли разделител€ целой и дробной части
@@ -167,6 +169,8 @@ type
     procedure multiply(by: Real); overload;
     procedure assign(Source:TPersistent); override;
     function integrate: Real;
+    procedure derivative;
+    procedure integral;
     procedure morepoints;
     end;
 implementation
@@ -727,6 +731,69 @@ for k:=j downto 1 do begin
 end;
 changed:=true;
 end;
+
+procedure table_func.derivative;
+var i,j :Integer;
+begin
+  if changed then update_spline;
+  j:=Length(X)-1;
+  dec(iOrder);
+  if iOrder=-1 then begin
+    iOrder:=0;
+  end;
+  for i:=0 to j do begin
+    Y[i]:=b[i];
+    b[i]:=2*c[i];
+    c[i]:=3*d[i];
+    d[i]:=0;
+  end;
+end;
+
+procedure table_func.integral;
+var i,j :Integer;
+    acc,prev_acc,r: Real;
+begin
+    if changed then update_spline;
+    j:=Length(X)-1;
+    acc:=0;
+    if iOrder<3 then begin
+    //интегрируем честно, коэф. хватает, чтобы записать результат
+    //первую итерацию "вручную", чтобы не вводить if внутрь цикла
+    d[0]:=c[0]/3;
+    c[0]:=b[0]/2;
+    b[0]:=Y[0];
+    Y[0]:=0;
+    for i:=1 to j do begin
+      r:=X[i]-X[i-1];
+      d[i]:=c[i]/3;
+      c[i]:=b[i]/2;
+      b[i]:=Y[i];
+      Y[i]:=Y[i-1]+r*(b[i-1]+r*(c[i-1]+r*d[i-1]));
+    end;
+    inc(iOrder);
+  end
+  else begin
+    //не хватает коэффициентов, значит, считаем узловые точки, а остальное интерполируем
+    prev_acc:=d[0]/4;
+    d[0]:=c[0]/3;
+    c[0]:=b[0]/2;
+    b[0]:=Y[0];
+    Y[0]:=0;
+    for i:=1 to j do begin
+      r:=X[i]-X[i-1];
+      acc:=d[i]/4;
+      d[i]:=c[i]/3;
+      c[i]:=b[i]/2;
+      b[i]:=Y[i];
+      Y[i]:=Y[i-1]+r*(b[i-1]+r*(c[i-1]+r*(d[i-1]+r*prev_acc)));
+      prev_acc:=acc;
+    end;
+    changed:=true; //значит, потом пройдет интерпол€ци€ кубическими сплайнами
+  end;
+
+
+end;
+
 
 function table_func.get_step :Real;
 begin
