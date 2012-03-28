@@ -66,7 +66,7 @@ The main features of this lib:
 
 * Class "table_func" is defined. You can make an instance of that class and work with it like it's just a mathematical function:
 
-<code>
+<pre>
  var y: table_func;
  result: Real;
  ...
@@ -77,12 +77,12 @@ The main features of this lib:
  ...
 
  y.Free;
-</code>
+</pre>
 
 Note that once the table was loaded from file, spline coefficients are automatically computed, so line "result=y[1.56]" is valid and returns good approximation no matter is value of function at 1.56 really in the table or not.
 
 You can do something like that:
-<code>
+<pre>
 var v,solar_spectrum: table_func;
 lux: Real;
 
@@ -98,21 +98,21 @@ lux:=solar_spectrum.integrate; //We found illuminance of sun in space near Earth
 
  v.free;
 solar_spectrum.free;
-</code>
+</pre>
 
 * Simple loading from file and saving to file. There are 2 supported file formats. 
 Plain text format: just two columns separated by tabs or spaces or commas or semicolons, whatever. Something like that:
-<code>
+<pre>
 0	0
 1	1
 2	0
 3	-1
 4	0
-</code>
+</pre>
 
 Ini file format: has 3 sections: general, description and data. Here is example:
 
-<code>
+<pre>
 [general]
 title=Solar Spectrum
 Xname=Wavelength
@@ -136,13 +136,13 @@ Data taken from "Planets As Background Noise in Free Space Optical Communication
 225	0,00649
 230	0,00667
 ....
-</code>
+</pre>
 
 Such a file is very useful because it contains not only points of data but some additional information. Using special fields for units in x and y values could be of great use to control whether result is of correct unit or not, or even automatically convert nm to um or just meters if needed. But such functionality wasn't implemented yet.
 
 There is example:
 
-<code>
+<pre>
 var s: table_func;
 
 ...
@@ -167,4 +167,4 @@ s.addpoint(140, 3E-6); //you can add points at random order.
 
 s.SaveToFile('Solar_Spectrum.txt');
 s.free;
-</code>
+</pre>
